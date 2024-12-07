@@ -203,8 +203,5 @@ Todas as inserções, alterações e desativações são registradas na tabela `
 - **Código 4 (Unidade de medida não encontrada):** Ao inserir/alterar, a `unid_medida` informada não foi cadastrada.
 - **Código 3 (Nenhum parâmetro de alteração informado):** Ao alterar, não foram fornecidos campos além do `cod_produto`.
 
-## Manutenção e Extensão
-- **Novos Campos:** Atualize a tabela `produtos` e o model `M_produto` para lidar com novos campos.
-- **Novas Regras de Negócio:** Podem ser adicionadas antes dos comandos de `INSERT`, `UPDATE` ou `SELECT`.
-- **Validações Específicas:** Inclua no controller ou no model conforme necessário.
+
 
