@@ -140,7 +140,7 @@ A interação ocorre principalmente via JSON, disponibilizando endpoints RESTful
 
 **Validações:**
 - `cod_produto` é obrigatório.
-- Se `unid_medida` for informada, deve existir.
+- Se `unid_medida` for informada, deve existir na tabela sigla do banco de dados.
 - Pelo menos um campo, além de `cod_produto`, deve ser alterado.
 
 **Exemplo de Sucesso (JSON):**
@@ -203,5 +203,53 @@ Todas as inserções, alterações e desativações são registradas na tabela `
 - **Código 4 (Unidade de medida não encontrada):** Ao inserir/alterar, a `unid_medida` informada não foi cadastrada.
 - **Código 3 (Nenhum parâmetro de alteração informado):** Ao alterar, não foram fornecidos campos além do `cod_produto`.
 
+## Banco de Dados
 
+### Tabelas do Banco de Dados
+
+**Tabela `produtos`**
+```sql
+CREATE TABLE produtos (
+  cod_produto int(11) NOT NULL AUTO_INCREMENT,
+  descricao varchar(30) DEFAULT '',
+  unid_medida varchar(3) NOT NULL,
+  estoq_maximo int(11) DEFAULT 0,
+  estoq_minimo int(11) DEFAULT 0,
+  dtcria datetime DEFAULT current_timestamp(),
+  usucria varchar(15) DEFAULT '',
+  estatus char(1) DEFAULT '',
+  PRIMARY KEY (cod_produto),
+  KEY fk_prod_usuarios (usucria),
+  KEY fk_prod_unidmed (unid_medida),
+  CONSTRAINT fk_prod_unidmed FOREIGN KEY (unid_medida) REFERENCES unid_medida (sigla),
+  CONSTRAINT fk_prod_usuarios FOREIGN KEY (usucria) REFERENCES usuarios (usuario)
+);
+```
+
+**Tabela `unid_medida`**
+```sql
+CREATE TABLE unid_medida (
+  sigla varchar(3) NOT NULL,
+  descricao varchar(30) DEFAULT '',
+  dtcria datetime DEFAULT current_timestamp(),
+  usucria varchar(15) DEFAULT '',
+  estatus char(1) DEFAULT '',
+  PRIMARY KEY (sigla),
+  KEY fk_unidmed_prod (usucria),
+  CONSTRAINT fk_unidmed_prod FOREIGN KEY (usucria) REFERENCES usuarios (usuario)
+);
+```
+
+**Tabela `usuarios`**
+```sql
+CREATE TABLE usuarios (
+  usuario varchar(15) NOT NULL,
+  senha varchar(32) NOT NULL,
+  nome varchar(30) DEFAULT '',
+  dtcria datetime DEFAULT current_timestamp(),
+  estatus char(1) DEFAULT '',
+  tipo varchar(20) DEFAULT '',
+  PRIMARY KEY (usuario)
+);
+```
 
